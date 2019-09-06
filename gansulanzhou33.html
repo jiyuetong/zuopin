@@ -1,0 +1,2101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>我的家在甘肃兰州！</title>
+<style>
+	#bg{
+		position: absolute;
+		;
+	}
+	#tb{
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	#zuo{
+		position: absolute;
+		top: 520px;
+		left: 230px;
+	}
+	#zuo2{
+		position: absolute;
+		top: 520px;
+		left: 780px;
+	}
+	#you{
+		position: absolute;
+		top: 520px;
+		left: 600px;
+	}
+	#youxi
+{
+position:absolute;
+left:280px;
+top:5px;		
+}
+</style>
+	<script language="javascript" type="text/javascript">
+var zuobiao;
+var quanjushuzu = new Array(new Array(3),new Array(3));
+var arr0 = new Array(3);
+var arr1 = new Array(3);
+var quanjushu = 0;
+var panduan;
+function init()
+{
+	var tab = document.getElementById("mytab");
+	for(var i = 0; i < 6; i++)
+	 {
+		 for(var j = 0; j <6; j++)
+		 {
+			 tab.rows[i].cells[j].innerHTML="<img src='0.png'/>";
+			 tab.rows[i].cells[j].value=0;
+			 tab.rows[i].cells[j].zuobiao = "i"+"j";
+			 
+		 }
+		 
+		 
+	 }
+	 for( var num = 0; num<2;num++)
+	 {
+	 	
+		chuxian(2);
+		chuxian(4);
+		chuxian(8);
+		chuxian(16);
+		chuxian(16);
+		chuxian(32);
+		chuxian(32);
+		chuxian(64);
+		chuxian(128);
+		chuxian(128);
+	 }
+}
+
+function chuxian(number)
+{
+	<!--一定要再次声明获取表格的id，在Init()函数里声明的id对象引用是局部变量，如果在函数外面声明会出现引用不到的情况，因为此时还没有加载完表格，没有此id对象-->
+	var tab = document.getElementById("mytab");
+	var hang = Math.random()*6;
+	hang = Math.floor(hang);
+	var lie = Math.random()*6;
+	lie = Math.floor(lie);
+	if(tab.rows[hang].cells[lie].value == 0) {
+	tab.rows[hang].cells[lie].innerHTML="<img src='"+number+".png'/>";
+	tab.rows[hang].cells[lie].value= number;
+	}
+	else{
+			
+		chuxian(number);
+	}
+		
+}
+
+function dianji(e)
+{
+	var tab = document.getElementById("mytab");
+	var x = e.clientX-280;
+	var y = e.clientY-5;
+	
+	var hangnum = Math.floor(y/80);
+	var lienum = Math.floor(x/80) ;
+	if(tab.rows[hangnum].cells[lienum].value != 0)
+	{
+		var evalue = tab.rows[hangnum].cells[lienum].value;
+		tab.rows[hangnum].cells[lienum].innerHTML="<img src='"+evalue+"1.png' ;/>";
+		
+		if (quanjushu <2)
+		{
+			
+			quanjushuzu[quanjushu][0] = evalue;
+			quanjushuzu[quanjushu][1] = hangnum;
+			quanjushuzu[quanjushu][2] = lienum;
+			
+			quanjushu++;
+			if(quanjushu ==2)
+			{
+				if(quanjushuzu[0][0]!=quanjushuzu[1][0])
+				{
+					
+					tab.rows[quanjushuzu[0][1]].cells[quanjushuzu[0][2]].innerHTML="<img src='"+quanjushuzu[0][0]+".png'/>";
+					tab.rows[quanjushuzu[1][1]].cells[quanjushuzu[1][2]].innerHTML="<img src='"+quanjushuzu[1][0]+".png' />";
+					
+				}
+				else
+				{
+					var panduan0 = lianxian0(evalue);	
+					if (!panduan0)
+					{
+						
+						var  panduan1= lianxian1(evalue);
+						if(!panduan1)
+						{
+							//alert("cant!!!!!!!!");
+							
+						}
+					}
+					
+				}
+				
+				quanjushu=0;
+			}
+		}
+	}
+}
+function lianxian0(numvalue)
+{
+	var tab = document.getElementById("mytab");
+	var minnum = 0;
+	var x0 = quanjushuzu[0][1];
+	var x1 = quanjushuzu[1][1];
+	
+	var y0 = quanjushuzu[0][2];
+	var y1 = quanjushuzu[1][2];
+	
+	if (x0 == x1 )
+	{
+		for(minnum = Math.min(y0,y1)+1;minnum < Math.max(y0,y1);minnum++)
+		{
+			//用来判断这一行是否有障碍
+			if(tab.rows[x0].cells[minnum].value !=0)
+			{
+				
+				//用来判断直连是否成功
+				break;
+				
+					
+			}	
+		}
+		if(minnum == Math.max(y0,y1))
+			{
+				tab.rows[x0].cells[Math.max(y0,y1)].innerHTML="<img src='0.png'/>";
+				//要记得消去原有图片给位置标记的值value
+				tab.rows[x0].cells[Math.max(y0,y1)].value = 0;
+				tab.rows[x0].cells[Math.min(y0,y1)].innerHTML="<img src='0.png'/>";
+				tab.rows[x0].cells[Math.min(y0,y1)].value = 0;
+			}
+		else
+		{
+			lianxian2(numvalue);
+		}
+		
+	} else if(y0 ==y1 )
+	{
+		for(minnum = Math.min(x0,x1)+1;minnum < Math.max(x0,x1);minnum++) 
+		{
+			if(tab.rows[minnum].cells[y0].value !=0)
+			{
+				
+				break;					
+			}
+		}
+		if(minnum == Math.max(x0,x1))
+			{
+				tab.rows[Math.max(x0,x1)].cells[y0].innerHTML="<img src='0.png'/>";
+				tab.rows[Math.max(x0,x1)].cells[y0].value = 0;
+				tab.rows[Math.min(x0,x1)].cells[y0].innerHTML="<img src='0.png'/>";
+				tab.rows[Math.min(x0,x1)].cells[y0].value = 0;
+			}
+		else
+		{
+			lianxian2(numvalue);
+		}
+	}
+	else
+	{
+		return 0;	
+	}
+	return 1;
+}
+function lianxian1(numvalue)
+{
+	
+	var tab = document.getElementById("mytab");
+	var minnumx = 0;
+	var minnumy = 0;
+	var flag = 0;
+	var x0 = quanjushuzu[0][1];
+	var x1 = quanjushuzu[1][1];
+	
+	var y0 = quanjushuzu[0][2];
+	var y1 = quanjushuzu[1][2];
+	
+	if(x0 > x1 && y0 < y1)
+	{
+		
+		for(var qingjing = 0; qingjing <2;qingjing++)
+		{
+			
+			if(qingjing ==0)
+			{
+				//两个循环，第一个循环判断条件是有等
+				flagx = 0;
+				flagy = 0;
+				for(minnumx = x0 -1; minnumx >= x1; minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						flagx = 1;
+						break;
+					}
+				}
+				if(flagx ==0)
+				{
+						for(minnumy = y0+1; minnumy < y1; minnumy++)
+						{
+							if(tab.rows[x1].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								break;
+							}	
+						}
+						if(flagy ==0)
+						{
+				
+							
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							//flag = 1;
+							return 1;
+						}
+				}
+					
+			}else
+			{
+				//两个循环，第一个循环判断条件是有等于号的
+				flagx =0;
+				flagy =0;
+				for(minnumy = y0+1; minnumy <= y1; minnumy++)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						flagy =1;
+						break;
+					}
+				}
+				if(flagy == 0)
+				{
+
+						for(minnumx = x0 -1; minnumx >x1; minnumx--)
+						{
+							if(tab.rows[minnumx].cells[y1].value !=0)
+							{
+								flagx = 1;
+								break;
+							}
+						}
+						if(flagx == 0)
+						{
+						//alert("x0 > x1 && y0 < y1 2" );
+						tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+						tab.rows[x0].cells[y0].value = 0;
+						tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+						tab.rows[x1].cells[y1].value = 0;
+						//flag = 1;
+						return 1;
+						}
+				}
+						
+				
+			}
+		}
+		
+	}else if(x0 > x1 && y0 > y1)
+	{
+		//全部重新改************************************************
+		for(var qingjing = 0; qingjing <2;qingjing++)
+		{
+			
+			if(qingjing ==0)
+			{
+				//两个循环，第一个循环判断条件是有等
+				flagx = 0;
+				flagy = 0;
+				for(minnumx = x0 -1; minnumx >= x1; minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						flagx = 1;
+								
+						break;
+					}
+				}
+				if (flagx == 0 )
+				{
+					for(minnumy = y0-1; minnumy > y1; minnumy--)
+					{
+							
+						if(tab.rows[x1].cells[minnumy].value != 0)
+						{
+								
+							flagy = 1;
+							break;
+						}
+							
+					}
+					if (flagy == 0)
+					{
+				
+					//alert("x0 > x1 && y0 > y1 1");
+					tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+					tab.rows[x0].cells[y0].value = 0;
+					tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+					tab.rows[x1].cells[y1].value = 0;
+					//flag = 1;
+					return 1;	
+					}
+				}
+							
+				
+			}else
+			{
+				//两个循环，第一个循环判断条件是有等于号的
+				flagx =0;
+				flagy = 0;
+				for(minnumy = y0-1; minnumy >= y1; minnumy--)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						flagy = 1;
+						break;
+					}
+				}
+					
+				if(flagy ==0 )
+				{
+						for(minnumx = x0 -1; minnumx >x1; minnumx--)
+						{
+							if(tab.rows[minnumx].cells[y1].value !=0)
+							{
+								flagx = 1;
+								break;
+							}
+						}
+						if(flagx ==0)
+						{
+							//alert("x0 > x1 && y0 > y1 2");
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							//flag = 1;
+							return 1;
+						}
+				}
+				
+			}
+		}
+			
+	}else if(x0 < x1 && y0 > y1)
+	{
+		for(var qingjing = 0; qingjing <2;qingjing++)
+		{
+			
+			if(qingjing ==0)
+			{
+				//两个循环，第一个循环判断条件是有等
+				flagx = 0;
+				flagy = 0;
+				for(minnumx = x0 +1; minnumx <= x1; minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						flagx = 1;
+						break;
+					}
+				}
+				if(flagx == 0)
+				{
+						for(minnumy = y0-1; minnumy > y1; minnumy--)
+						{
+							if(tab.rows[x1].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								break;
+							}
+					
+						}
+						if(flagy == 0)
+						{
+							//alert('x0 < x1 && y0 > y1 1');
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							flag = 1;
+							return 1;
+						}
+				}
+						
+			}else
+			{
+				flagx =0;
+				flagy = 0;
+				//两个循环，第一个循环判断条件是有等于号的
+				for(minnumy = y0-1; minnumy >= y1; minnumy--)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						flagy =1;
+						break;
+					}
+				}
+				if(flagy ==0)
+				{
+						
+						for(minnumx = x0+1; minnumx <x1; minnumx++)
+						{
+							if(tab.rows[minnumx].cells[y1].value !=0)
+							{
+								flagx = 1;
+								break;
+							}
+						}
+						if(flagx == 0)
+						{
+							//alert('x0 < x1 && y0 > y1 2');
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							//flag = 1;
+							return 1;
+						}
+				}
+					
+			}
+		}	
+	}else if(x0 < x1 && y0 < y1)
+	{
+		for(var qingjing = 0; qingjing <2;qingjing++)
+		{
+			
+			if(qingjing ==0)
+			{
+				//两个循环，第一个循环判断条件是有等
+				flagx =0;
+				flagy =0;
+				for(minnumx = x0 +1; minnumx <= x1; minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						flagx =1;
+						break;
+					}
+				}
+				if(flagx ==0)
+				{
+						for(minnumy = y0+1; minnumy < y1; minnumy++)
+						{
+							if(tab.rows[x1].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								break;
+							}	
+						}
+						if(flagy == 0)
+						{
+							//alert("x0 < x1 && y0 < y1 1");
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							//flag = 1;
+							return 1;
+						}
+				}
+					
+			}else
+			{
+				//两个循环，第一个循环判断条件是有等于号的
+				flagy =0;
+				flagx =0;
+				for(minnumy = y0+1; minnumy <= y1; minnumy++)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						flagy =1;
+						break;
+					}
+				}
+				if(flagy ==0)
+				{
+						
+						for(minnumx = x0+1; minnumx < x1; minnumx++)
+						{
+							if(tab.rows[minnumx].cells[y1].value !=0)
+							{
+								flagx =1;
+								break;
+							}
+						}
+						if(flagx == 0)
+						{
+							//alert("x0 < x1 && y0 < y1 2");
+							tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+							tab.rows[x0].cells[y0].value = 0;
+							tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+							tab.rows[x1].cells[y1].value = 0;
+							//flag = 1;
+							return 1;
+						}
+				}
+						
+			}
+		}
+	}
+	if (flag ==0)
+	{
+		lianxian2(numvalue);
+			
+	}
+	return 1;
+}
+function lianxian2(numvalue)
+{
+	var tab = document.getElementById("mytab");
+	var minnumx = 0;
+	var minnumy = 0;
+	var minnumy2 = 0;
+	var minnumx2 = 0;
+	var x0 = quanjushuzu[0][1];
+	var x1 = quanjushuzu[1][1];
+	
+	var y0 = quanjushuzu[0][2];
+	var y1 = quanjushuzu[1][2];
+	var flagy = 0;
+	var flagx = 0;
+	var flag =0;
+	if (x0 == x1 && y0!= y1 )
+	{	
+		//alert("222");
+		//alert("x0=x1 y0!=y1");
+		for(var qingjing = 0 ; qingjing <2; qingjing++)
+		{
+			
+			if (qingjing ==0)
+			{
+				
+				for(minnumx = x0 -1;minnumx >=0;minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y0].value !=0 || tab.rows[minnumx].cells[y1].value !=0)
+					{
+						//alert("上方有障碍物");
+						break;
+						
+					}
+					else{
+						flagy = 0;
+						flagx = 0;
+						for (minnumy = Math.min(y0,y1 ); minnumy <= Math.max(y0,y1); minnumy++)
+						{
+							if(tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								break;
+								
+							}	
+						
+						}
+					
+						if (flagy == 0)
+						{
+							for(minnumx2 = minnumx; minnumx2 < x0; minnumx2++)
+							{
+								if(tab.rows[minnumx2].cells[minnumy - 1].value !=0)
+									{
+										flagx = 1;
+										break;
+									}	
+							}
+							if (flagx == 0)
+							{
+								//alert("x0 == x1 up");
+						
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}else
+			{
+				//alert("huhhhhhhh");
+				for(minnumx = x0 +1;minnumx <6;minnumx++)
+				{
+					//alert("fdsffffff");
+					if(tab.rows[minnumx].cells[y0].value !=0 || tab.rows[minnumx].cells[y1].value !=0)
+					{
+						//alert("shenma 1");
+						//alert("下方有障碍物");
+						break;
+						
+					}
+					else
+					{
+						flagy = 0;
+						flagx = 0;
+						//alert("+++++++++++++___________________+");
+						for (minnumy = Math.min(y0,y1 ); minnumy <= Math.max(y0,y1); minnumy++)
+						{
+							//alert("++++++++++++++");
+							//alert(minnumy);
+							if(tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								//alert("shenma 1");
+								flagy = 1;
+								break;
+							}	
+						
+						}
+					
+						if (flagy == 0 )
+						{
+							for(minnumx2 = minnumx; minnumx2 > x0; minnumx2--)
+							{
+								//alert("_______________");
+								//alert(minnumx2+ ""+ minnumy);
+								if(tab.rows[minnumx2].cells[minnumy - 1].value !=0)
+									{
+										//alert("shenma 2");
+										flagx = 1;
+										break;
+									}	
+							}
+							//alert("*********************");
+							if (flagx == 0)
+							{
+								//alert("x0 ==x1 down");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}
+		}
+	}else if(y0 == y1 && x1 != x0)
+	{
+		for(var qingjing = 0 ; qingjing <2; qingjing++)
+		{
+			if (qingjing ==0)
+			{
+				for(minnumy = y0 -1;minnumy >=0;minnumy--)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0 || tab.rows[x1].cells[minnumy].value !=0)
+					{
+						//alert("左方有障碍物");
+						break;
+						
+					}
+					else
+					{
+						flagx =0;
+						flagy = 0;
+						for (minnumx = Math.min(x0,x1 ); minnumx <= Math.max(x0,x1); minnumx++)
+						{
+							//alert(minnumx + "" + minnumy+ "kkkkkkkkkkkkkkk");
+							if(tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								//alert("我进来了左");
+								flagx = 1;
+								break;
+							}	
+						
+						}
+					
+						if (flagx == 0)
+						{
+							for(minnumy2 = minnumy; minnumy2 < y1;minnumy2++)
+							{
+								if(tab.rows[minnumx - 1].cells[minnumy2].value !=0)
+								{
+									flagy = 1;
+									break;
+								}	
+							}
+							if (flagy == 0)
+							{
+								//alert("y0 == y1 left");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}else
+			{
+				for(minnumy = y0 +1;minnumy <6;minnumy++)
+				{
+					if(tab.rows[x0].cells[minnumy].value !=0 || tab.rows[x1].cells[minnumy].value !=0)
+					{
+						break;
+						
+					}
+					else
+					{
+						flagx =0;
+						flagy = 0;
+						for (minnumx = Math.min(x0,x1 ); minnumx <= Math.max(x0,x1); minnumx++)
+						{
+							if(tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+							
+								flagx = 1;
+								//alert("我进来了you");
+								break;
+							}	
+						
+						}
+					
+						if (flagx ==0)
+						{
+							for(minnumy2 = minnumy; minnumy2 > y1;minnumy2--)
+							{
+								//alert(minnumx);
+								if(tab.rows[minnumx - 1].cells[minnumy2].value !=0)
+								{
+									flagy = 1;
+									break;
+								}	
+							}	
+							if(flagy == 0)
+							{
+								//alert("y0 == y1 right");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}
+		}
+	}else if (x0 ==x1 && y0 == y1)
+	{
+		tab.rows[x0].cells[y0].innerHTML="<img src='"+numvalue+".png' />";
+		tab.rows[x0].cells[y0].value = numvalue;
+		tab.rows[x1].cells[y1].innerHTML="<img src='"+numvalue+".png'/>";
+		tab.rows[x1].cells[y1].value = numvalue;	
+	}else if (x0 > x1 && y0 < y1 )
+	{
+		//alert("x0>x1 y0<y1");
+		for(var qingjing = 0 ; qingjing <6; qingjing++)
+		{
+			//第一种情况：从右边开始走
+			if (qingjing ==0)
+			{
+				for( minnumy = y0+1; minnumy < y1; minnumy++)
+				{
+					//alert("minnumy" +minnumy);
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						//alert(minnumy);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagx = 0;
+						for	(minnumx = x0 -1; minnumx >= x1; minnumx--)
+						{
+							
+							//alert("minnumx" +minnumx);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagx = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagx);
+						//此时位置已经是（x1,minnumy)
+						if (flagx == 0)
+						{
+							//alert("缉拿俩了");
+							flagy = 0;
+							for (minnumy2 = minnumy +1; minnumy2 < y1; minnumy2++)
+							{
+								if (tab.rows[x1].cells[minnumy2].value !=0)
+								{
+									//alert(minnumy2+"minnumy2");
+									flagy = 1;
+									break;	
+								}
+							}
+							if (flagy == 0)
+							{
+								//alert("三线二折——1——右上右");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+								
+							}
+						}
+					}
+					
+				}
+				
+			//第二种情况：从上边开始	
+			}else if(qingjing ==1)
+			{
+				
+				for( minnumx = x0 -1; minnumx > x1; minnumx--)
+				{
+					//alert("minnumx" +minnumx);
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						//alert(minnumx);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagy = 0;
+						flagx = 0;
+						for	(minnumy = y0 +1; minnumy <= y1; minnumy++)
+						{
+							
+							//alert("minnumy" +minnumy);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagy);
+						//此时位置已经是（x1,minnumy)
+						if (flagy == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumx2 = minnumx -1; minnumx2 > x1; minnumx2--)
+							{
+								if (tab.rows[minnumx2].cells[y1].value !=0)
+								{
+									//alert(minnumx2+"minnumx2");
+									flagx = 1;
+									break;	
+								}
+							}
+							//alert(flagx);
+							if (flagx == 0)
+							{
+								//alert("三线二折——2——上右上");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}else if(qingjing ==2)
+			{
+				//alert("down down");
+				flagx = 0;
+				for(minnumx2 = x1 +1 ; minnumx2 <=x0; minnumx2++ )
+				{
+					if(tab.rows[minnumx2].cells[y1].value != 0)
+					{
+						flagx =1;
+						//alert("下方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x0 +1; minnumx < 6;minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y0].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y1].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折——down down");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==3)
+			{
+				//alert("up up");
+				flagx = 0;
+				for(minnumx2 = x0 -1 ; minnumx2 >=x1; minnumx2-- )
+				{
+					if(tab.rows[minnumx2].cells[y0].value != 0)
+					{
+						flagx =1;
+						//alert("上方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x1 -1; minnumx >= 0;minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y1].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y0].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折—2—up up");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==4)
+			{
+				//alert("right right");
+				flagy = 0;
+				for(minnumy2 = y0 +1 ; minnumy2 <=y1; minnumy2++ )
+				{
+					if(tab.rows[x0].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("右方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y1+ 1; minnumy < 6;minnumy++)
+				{
+					if(tab.rows[x1].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x0].cells[minnumy].value == 0)
+						{
+							flagx =0;
+							for (minnumx = x1 +1;minnumx < x0; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——right right");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==5)
+			{
+				//alert("left left");
+				flagy = 0;
+				for(minnumy2 = y1 -1 ; minnumy2 >=y0; minnumy2-- )
+				{
+					if(tab.rows[x1].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("左方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y0- 1; minnumy >= 0;minnumy--)
+				{
+					if(tab.rows[x0].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x1].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x1 +1;minnumx < x0; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——left left");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+			}
+			
+		}
+		}
+	}else if (x0 > x1 && y0 > y1 )
+	{
+		//alert("sanzhongqngk")
+		for(var qingjing = 0 ; qingjing <6; qingjing++)
+		{
+			//第一种情况：从左边开始走
+			if (qingjing ==0)
+			{
+				for( minnumy = y0-1; minnumy > y1; minnumy--)
+				{
+					//alert("minnumy" +minnumy);
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						//alert(minnumy + "3.1t跳出");
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagx = 0;
+						flagy = 0;
+						for	(minnumx = x0 -1; minnumx >= x1; minnumx--)
+						{
+							
+							//alert("minnumx" +minnumx);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagx = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagx);
+						//此时位置已经是（x1,minnumy)
+						if (flagx == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumy2 = minnumy -1; minnumy2 > y1; minnumy2--)
+							{
+								if (tab.rows[x1].cells[minnumy2].value !=0)
+								{
+									//alert(minnumy2+"minnumy2");
+									flagy = 1;
+									break;	
+								}
+							}
+							if (flagy == 0)
+							{
+								//alert("三线二折——3——左上左");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+								
+							}
+						}
+					}
+					
+				}
+				
+			//第二种情况：从上边开始	
+			}else if(qingjing ==1)
+			{
+				
+				for( minnumx = x0 -1; minnumx > x1; minnumx--)
+				{
+					//alert("minnumx" +minnumx);
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						//alert(minnumx);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagy = 0;
+						flagx = 0;
+						for	(minnumy = y0 -1; minnumy >= y1; minnumy--)
+						{
+							
+							//alert("minnumy" +minnumy);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagy);
+						//此时位置已经是（x1,minnumy)
+						if (flagy == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumx2 = minnumx -1; minnumx2 > x1; minnumx2--)
+							{
+								if (tab.rows[minnumx2].cells[y1].value !=0)
+								{
+									//alert(minnumx2+"minnumx2");
+									flagx = 1;
+									break;	
+								}
+							}
+							//alert(flagx);
+							if (flagx == 0)
+							{
+								//alert("三线二折——4——上左上");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}
+					}
+					
+				}
+			}else if(qingjing ==2)
+			{
+				//alert("down down");
+				flagx = 0;
+				for(minnumx2 = x1 +1 ; minnumx2 <=x0; minnumx2++ )
+				{
+					if(tab.rows[minnumx2].cells[y1].value != 0)
+					{
+						flagx =1;
+						//alert("下方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x0 +1; minnumx < 6;minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y0].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y1].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折——down down");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==3)
+			{
+				//alert("up up");
+				flagx = 0;
+				for(minnumx2 = x0 -1 ; minnumx2 >=x1; minnumx2-- )
+				{
+					if(tab.rows[minnumx2].cells[y0].value != 0)
+					{
+						flagx =1;
+						//alert("上方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x1 -1; minnumx >= 0;minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y1].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y0].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折—2—up up");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==4)
+			{
+				//alert("right right");
+				flagy = 0;
+				for(minnumy2 = y1 +1 ; minnumy2 <=y0; minnumy2++ )
+				{
+					if(tab.rows[x1].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("右方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y0+ 1; minnumy < 6;minnumy++)
+				{
+					if(tab.rows[x0].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x1].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x1 +1;minnumx < x0; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——right right");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==5)
+			{
+				//alert("left left");
+				flagy = 0;
+				for(minnumy2 = y0 -1 ; minnumy2 >=y1; minnumy2--)
+				{
+					if(tab.rows[x0].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("左方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y1- 1; minnumy >= 0;minnumy--)
+				{
+					if(tab.rows[x1].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x0].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x1 +1;minnumx < x0; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——left left");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}
+		}
+	}else if( x0 < x1 && y0 > y1)
+	{
+		for(var qingjing = 0 ; qingjing <6; qingjing++)
+		{
+			if (qingjing ==0)
+			{
+				for( minnumy = y0-1; minnumy > y1; minnumy--)
+				{
+					//alert("minnumy" +minnumy);
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						//alert(minnumy);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagx = 0;
+						flagy =0;
+						for	(minnumx = x0 +1; minnumx <= x1; minnumx++)
+						{
+							
+							//alert("minnumx" +minnumx);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagx = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagx);
+						//此时位置已经是（x1,minnumy)
+						if (flagx == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumy2 = minnumy -1; minnumy2 > y1; minnumy2--)
+							{
+								if (tab.rows[x1].cells[minnumy2].value !=0)
+								{
+									//alert(minnumy2+"minnumy2");
+									flagy = 1;
+									break;	
+								}
+							}
+							if (flagy == 0)
+							{
+								//alert("三线二折——5——左下左");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+								
+							}
+						}
+					}
+					
+				}
+				
+			//第二种情况：从上边开始	
+			}else if(qingjing ==1)
+			{
+				for( minnumx = x0 +1; minnumx < x1; minnumx++)
+				{
+					//alert("minnumx" +minnumx);
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						//alert(minnumx);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagy = 0;
+						flagx = 0;
+						for	(minnumy = y0 -1; minnumy >= y1; minnumy--)
+						{
+							
+							//alert("minnumy" +minnumy);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagy);
+						//此时位置已经是（x1,minnumy)
+						if (flagy == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumx2 = minnumx +1; minnumx2 < x1; minnumx2++)
+							{
+								if (tab.rows[minnumx2].cells[y1].value !=0)
+								{
+									//alert(minnumx2+"minnumx2");
+									flagx = 1;
+									break;	
+								}
+							}
+							//alert(flagx);
+							if (flagx == 0)
+							{
+								//alert("三线二折——6——下左下");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}
+					}
+					
+				}
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~*********************************
+			}else if(qingjing ==2)
+			{
+				//alert("down down");
+				flagx = 0;
+				for(minnumx2 = x0 +1 ; minnumx2 <=x1; minnumx2++ )
+				{
+					if(tab.rows[minnumx2].cells[y0].value != 0)
+					{
+						flagx =1;
+						//alert("下方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x1 +1; minnumx < 6;minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y1].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y0].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折——down down");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==3)
+			{
+			//	alert("up up");
+				flagx = 0;
+				for(minnumx2 = x1 -1 ; minnumx2 >=x0; minnumx2-- )
+				{
+					if(tab.rows[minnumx2].cells[y1].value != 0)
+					{
+						flagx =1;
+					//	alert("上方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x0 -1; minnumx >= 0;minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y0].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y1].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折—2—up up");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==4)
+			{
+				//alert("right right");
+				flagy = 0;
+				for(minnumy2 = y1 +1 ; minnumy2 <=y0; minnumy2++ )
+				{
+					if(tab.rows[x1].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("右方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y0+ 1; minnumy < 6;minnumy++)
+				{
+					if(tab.rows[x0].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x1].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x0 +1;minnumx < x1; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——right right");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==5)
+			{
+				//alert("left left");
+				flagy = 0;
+				for(minnumy2 = y0 -1 ; minnumy2 >=y1; minnumy2--)
+				{
+					if(tab.rows[x0].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("左方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y1- 1; minnumy >= 0;minnumy--)
+				{
+					if(tab.rows[x1].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x0].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x0 +1;minnumx < x1; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——left left");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}
+		}
+	}else if(x0 < x1 && y0 < y1)
+	{
+		for(var qingjing = 0 ; qingjing <6; qingjing++)
+		{
+			if (qingjing ==0)
+			{
+				for( minnumy = y0+1; minnumy < y1; minnumy++)
+				{
+					//alert("minnumy" +minnumy);
+					if(tab.rows[x0].cells[minnumy].value !=0)
+					{
+						//alert(minnumy);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagx = 0;
+						flagy = 0;
+						for	(minnumx = x0 +1; minnumx <= x1; minnumx++)
+						{
+							
+							//alert("minnumx" +minnumx);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagx = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagx);
+						//此时位置已经是（x1,minnumy)
+						if (flagx == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumy2 = minnumy +1; minnumy2 < y1; minnumy2++)
+							{
+								if (tab.rows[x1].cells[minnumy2].value !=0)
+								{
+									//alert(minnumy2+"minnumy2");
+									flagy = 1;
+									break;	
+								}
+							}
+							if (flagy == 0)
+							{
+								//alert("三线二折——7——右下右");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+								
+							}
+						}
+					}
+					
+				}
+			}
+			else if (qingjing ==1)
+			{
+				for( minnumx = x0 +1; minnumx < x1; minnumx++)
+				{
+					//alert("minnumx" +minnumx);
+					if(tab.rows[minnumx].cells[y0].value !=0)
+					{
+						//alert(minnumx);
+						break;
+					}
+					else
+					{
+						//一定要给flag重新置0
+						flagy = 0;
+						flagx = 0;
+						for	(minnumy = y0 +1; minnumy <= y1; minnumy++)
+						{
+							
+							//alert("minnumy" +minnumy);
+							if (tab.rows[minnumx].cells[minnumy].value !=0)
+							{
+								flagy = 1;
+								//alert(minnumx+"minnumx");
+								break;	
+							}
+						}
+						//alert(flagy);
+						//此时位置已经是（x1,minnumy)
+						if (flagy == 0)
+						{
+							//alert("缉拿俩了");
+							for (minnumx2 = minnumx +1; minnumx2 < x1; minnumx2++)
+							{
+								if (tab.rows[minnumx2].cells[y1].value !=0)
+								{
+									//alert(minnumx2+"minnumx2");
+									flagx = 1;
+									break;	
+								}
+							}
+							//alert(flagx);
+							if (flagx == 0)
+							{
+								//alert("三线二折——8——下右下");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}
+					}
+					
+				}
+			
+			}else if(qingjing ==2)
+			{
+				//alert("down down");
+				flagx = 0;
+				for(minnumx2 = x0 +1 ; minnumx2 <=x1; minnumx2++ )
+				{
+					if(tab.rows[minnumx2].cells[y0].value != 0)
+					{
+						flagx =1;
+						//alert("下方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x1 +1; minnumx < 6;minnumx++)
+				{
+					if(tab.rows[minnumx].cells[y1].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y0].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折——down down");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==3)
+			{
+				//alert("up up");
+				
+				flagx = 0;
+				for(minnumx2 = x1 -1 ; minnumx2 >=x0; minnumx2-- )
+				{
+					if(tab.rows[minnumx2].cells[y1].value != 0)
+					{
+						flagx =1;
+						//alert("上方有阻挡");
+						break;	
+					}
+				}
+				if (flagx ==0)
+				{
+				for (minnumx = x0 -1; minnumx >= 0;minnumx--)
+				{
+					if(tab.rows[minnumx].cells[y0].value != 0)
+					{
+						break;	
+					}
+					else
+					{
+						
+						if(tab.rows[minnumx].cells[y1].value == 0)
+						{
+							flagy = 0;
+							for(minnumy = Math.min(y0, y1)+ 1; minnumy < Math.max(y0, y1); minnumy++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagy =1;
+									break;	
+								}
+							}
+							if(flagy ==0)
+							{
+								//alert("三线二折—2—up up");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==4)
+			{
+				//alert("right right");
+				flagy = 0;
+				for(minnumy2 = y0 +1 ; minnumy2 <=y1; minnumy2++ )
+				{
+					if(tab.rows[x0].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("右方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y1+ 1; minnumy < 6;minnumy++)
+				{
+					if(tab.rows[x1].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x0].cells[minnumy].value == 0)
+						{
+							flagx = 0;
+							for (minnumx = x0 +1;minnumx < x1; minnumx++)
+							{
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——right right");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}else if(qingjing ==5)
+			{
+				//alert("left left");
+				flagy = 0;
+				for(minnumy2 = y1 -1 ; minnumy2 >=y0; minnumy2-- )
+				{
+					if(tab.rows[x1].cells[minnumy2].value != 0)
+					{
+						flagy =1;
+						//alert("左方有阻挡");
+						break;	
+					}
+				}
+				if (flagy ==0)
+				{
+				for(minnumy = y0- 1; minnumy >= 0;minnumy--)
+				{
+					if(tab.rows[x0].cells[minnumy].value != 0)
+					{
+						break;	
+					}else
+					{
+						if(tab.rows[x1].cells[minnumy].value == 0)
+						{
+							for (minnumx = x0 +1;minnumx < x1; minnumx++)
+							{
+								flagx = 0;
+								if(tab.rows[minnumx].cells[minnumy].value != 0)
+								{
+									flagx =1;
+									break;	
+								} 	
+							}
+							if (flagx == 0)
+							{
+								//alert("三线二折——left left");
+								tab.rows[x0].cells[y0].innerHTML="<img src='0.png'/>";
+								tab.rows[x0].cells[y0].value = 0;
+								tab.rows[x1].cells[y1].innerHTML="<img src='0.png'/>";
+								tab.rows[x1].cells[y1].value = 0;	
+								return 1;
+							}
+						}else
+						{
+							break;	
+						}
+					}
+				}
+				}
+			}
+		}
+	}
+	if (flag == 0)
+	{
+		tab.rows[x0].cells[y0].innerHTML="<img src='"+numvalue+".png' />";
+		tab.rows[x0].cells[y0].value = numvalue;
+		tab.rows[x1].cells[y1].innerHTML="<img src='"+numvalue+".png'/>";
+		tab.rows[x1].cells[y1].value = numvalue;
+	}
+	
+}
+</script>
+</head>
+
+<body onload="init()">
+<img id="bg" src="../../images/shouyebeijing.png" width="1000" height="600">
+</h1>
+<img id="tb" src="../../images/lianliankanshuomingwenzi.png" width="200" height="170" > 
+<div id="youxi" style="width:400px;height:400px; ">
+	<table id="mytab" style="border:1px solid white;width:400px;height:400px;cellspacing:0; " onclick="dianji(event)">
+<tr><td></td><td ></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+<a href="../gansulanzhou2.html"><img id="zuo" src="../../images/wozaihuiqukankan.png" width="205" height="61"></a>
+<a href="../lihuadeyiwen.html"><img id="zuo2" src="../../images/tuichu.png" width="85" height="61"></a>
+</body>
+</html>

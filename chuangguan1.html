@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>答题闯关</title>
+<style type="text/css">
+a img{border:0;}
+a img:hover{border:0;}
+body{
+	margin:0;}
+/*内容*/
+#cs{
+	background:url( ../images/datibeijingtu.png) no-repeat;
+	width:1000px;
+	height:620px; 
+	margin:0 auto;
+	position:relative;
+}
+#cs h1{
+	position:absolute;
+	top:5px;
+	left:140px;
+	font-family:"幼圆";
+	color:#243EB6;}
+#tm{
+	position:absolute;
+	top:130px;
+	left:190px;
+	width:650px;
+	height:300px;
+	font-family:"幼圆";
+	font-weight:bold;}
+#tm h2{
+	font-size:26px;
+	
+	}
+#tm ul{
+	font-size:24px;
+	}
+#tj{
+	background-color:#14CE80;
+	border:0;
+	font-family:"幼圆";
+	color:aliceblue;
+	font-weight:bold;
+	height:50px;
+	width:100px;
+	font-size:20px;
+	border-radius:5px;
+	position:absolute;
+	left:55px;
+	}
+#zq{
+	position:absolute;
+	width:450px;
+	height:80px;
+	left:240px;
+	top:85px;
+	font-family:"幼圆";
+	color:#F56232;
+	font-size:20px;
+	font-weight:bold;
+	}
+#xyy a img{
+	position:absolute;
+	top:320px;
+	left:540px;
+	
+	}
+#xyy a img:hover{
+	  width:75px;
+	  height:65px;
+	 
+	}	
+
+</style>
+<script type="text/javascript">
+function myFunction()
+{
+	var abc=document.myform.answer.value;
+	var audio1 = document.getElementById('music1'); 
+	 var audio2 = document.getElementById('music2'); 
+	if(abc=="answer2" || abc=="answer3")
+	{document.getElementById("zq").innerHTML = "可以再想想哦！";
+	  audio2.play(); 
+	
+	}
+	else if(abc=="answer1")
+	{document.getElementById("zq").innerHTML = "恭喜你答对了！你真棒！";
+	  audio1.play(); 
+}
+	else
+	{document.getElementById("zq").innerHTML="你以为我不知道你没有答题嘛？快做完了再点我吧！";
+	  audio2.play(); 
+}
+}
+</script>
+</head>
+
+
+
+<body>
+<div id="cs">
+<!--内容-->
+<h1 align="center">你也和李华一样解开了自己的疑惑了么？来试试吧！</h1>
+<div id="tm">
+<h2>1&nbsp;.&nbsp;以下三个选择中哪个是黄河的称呼呢？</h2>
+<form action="" method="post" name="myform" id="myform">
+<ul style="list-style:none;">
+<li><input type="radio" value="answer1" name="answer" />母亲河</li>
+<li><input type="radio" value="answer2" name="answer" />中国南部大河</li>
+<li><input type="radio" value="answer3" name="answer" />中国第一长河
+	</li>
+</ul>
+<br>
+<input type="button" value="做完了" name="submit" onClick="myFunction()" id="tj" >
+<div id="zq">
+</div>
+<audio src="../yinpinshipin/daduile.mp3" controls preload id="music1" hidden>
+</audio>
+<audio src="../yinpinshipin/dacuola.mp3" controls preload id="music2" hidden>
+</audio>
+</form>
+</div>
+<div id="xyy">
+<a href="chuangguan2.html"><img src="../images/xiayiti.png" width="80px" height="60px"></a>
+</div>
+	</div>
+</body>
+</html>

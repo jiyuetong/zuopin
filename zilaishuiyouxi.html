@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>净水流程排序</title>
+<style>
+		.item img {
+		width:115px;
+		height:40px;
+		float: left;
+	}
+	.item{
+        float: left;
+        margin: 10px;
+	}
+	.drop-left,.drop-right {
+		width: 50px;
+		height: 200px;
+		float: left;
+	}
+	#bg{
+		position: absolute;
+		;
+	}
+	h1{	width: 800px;
+		position:absolute;
+		top: 50px;
+		left: 100px;
+		font-family:"幼圆"," 华文彩云";
+		font-size: 34px;
+		color:darkgreen;
+	}
+	#tb{
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	#drag-wrap{
+		position: absolute;
+		top: 250px;
+		left:120px;
+	}
+	#zuo{
+		position: absolute;
+		top: 520px;
+		left: 230px;
+	}
+	#zuo2{
+		position: absolute;
+		top: 520px;
+		left: 780px;
+	}
+	#you{
+		position: absolute;
+		top: 520px;
+		left: 600px;
+	}
+</style>
+</head>
+
+<body>
+	
+<img id="bg" src="../images/shouyebeijing.png" width="1000" height="600"><div id="drag-wrap" width="950" height="80" >
+	<div class="item" id="wrap1">
+		<img src="../images/河中抽水.png" id="img1" draggable="true">
+	</div>
+	<div class="item" id="wrap2">
+		<img src="../images/消毒处理.png" id="img2" draggable="true">
+	</div>
+	<div  class="item" id="wrap3">
+		<img src="../images/过滤处理.png" id="img3"  draggable="true">
+	</div>
+	<div  class="item" id="wrap4">
+		<img src="../images/沉淀处理.png" id="img4"  draggable="true">
+    </div>
+<div  class="item" id="wrap4">
+		<img src="../images/絮凝反应.png" id="img4"  draggable="true">
+    </div>
+	<div  class="item" id="wrap4">
+		<img src="../images/用户用水.png" id="img4"  draggable="true">
+    </div>
+</div>
+	</div>
+<h1 align="center">通过前面的学习，试试将下列的净水过程<br>正确排序吧！
+（拖动图片即可）</h1>
+<img id="tb" src="../images/jiayou.jpg" width="170" height="170" > 
+<a href="zilaishui1.html"><img id="zuo" src="../images/wozaihuiqukankan.png" width="205" height="61"></a>
+<a href="zilaishui2.html"><img id="zuo2" src="../images/fanhui.png" width="85" height="61"></a>
+</body>
+</html>
+<script>
+const dragCon = document.getElementById('drag-wrap');
+dragCon.addEventListener('dragstart', startDrag, false);
+/**
+*  这里一定要阻止dragover的默认行为，不然触发不了drop
+*/
+dragCon.addEventListener('dragover', function (e) {
+    e.preventDefault();
+}, false);
+dragCon.addEventListener('drop', exchangeElement, false);
+
+function startDrag(e) {
+    console.log(e)
+    e.dataTransfer.setData('Text', e.target.id + ';' + e.target.parentElement.id);
+}
+function exchangeElement(e) {
+    e.preventDefault();
+    const el = e.target;
+    let PE, //要插入位置的父元素
+        CE; //需要交换的元素
+    if (el.tagName.toLowerCase() !== 'div') {                     
+        PE = el.parentElement;
+        CE = el;
+    } else {
+        PE = el;
+        CE = el.querySelector('img');
+    }
+    /**
+        * 判断不在控制范围内
+        */
+    if (!PE.classList.contains('item')) {
+        return;
+    }
+    const data = e.dataTransfer.getData('Text').split(';');
+    //交换元素
+    document.getElementById(data[1]).appendChild(CE);
+    PE.appendChild(document.getElementById(data[0]));
+}
+</script>
